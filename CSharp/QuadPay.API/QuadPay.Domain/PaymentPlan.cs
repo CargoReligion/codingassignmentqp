@@ -20,6 +20,15 @@ namespace QuadPay.Domain
             int installmentCount = _defaultInstallmentCount, 
             int installmentIntervalDays = _defaultInstallmentIntervalDays)
         {
+            if (amount <= 0.0m)
+                throw new ArgumentException($"Amount entered must be greater than zero. {nameof(amount)}: {amount}");
+
+            if (installmentCount <= 0)
+                throw new ArgumentException($"There must be atleast one installment. {nameof(installmentCount)}: {installmentCount}");
+
+            if (installmentIntervalDays <= 0)
+                throw new ArgumentException($"There must be atleast one installment interval day. {nameof(installmentIntervalDays)}: {installmentIntervalDays}");
+
             Id = Guid.NewGuid();
             TotalAmountDue = amount;
             OriginationDate = DateTime.Now;

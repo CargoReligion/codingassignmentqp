@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using QuadPay.Domain;
+using FluentAssertions;
 
 namespace QuadPay.Test
 {
@@ -8,14 +9,22 @@ namespace QuadPay.Test
     {
 
         [Theory]
-        [InlineData(-100, 4, 2)]
-        [InlineData(123.23, 0, 2)]
-        // TODO What other situations should we be testing?
-        public void ShouldThrowExceptionForInvalidParameters(decimal amount, int installmentCount, int installmentIntervalDays)
+        [InlineData(-100, 4, 2, "Amount entered must be greater than zero. amount: -100")]
+        [InlineData(0, 4, 14, "Amount entered must be greater than zero. amount: 0")]
+        [InlineData(123.23, 0, 2, "There must be atleast one installment. installmentCount: 0")]
+        [InlineData(123.23, -1, 2, "There must be atleast one installment. installmentCount: -1")]
+        [InlineData(200, 4, -2, "There must be atleast one installment interval day. installmentIntervalDays: -2")]
+        [InlineData(200, 4, 0, "There must be atleast one installment interval day. installmentIntervalDays: 0")]
+        public void ShouldThrowExceptionForInvalidParameters(
+            decimal amount, 
+            int installmentCount, 
+            int installmentIntervalDays,
+            string expectedErrorMessage)
         {
-            Assert.Throws<ArgumentException>(() => {
+            var exception = Assert.Throws<ArgumentException>(() => {
                 var paymentPlan = new PaymentPlan(amount, installmentCount, installmentIntervalDays);
             });
+            exception.Message.Should().Be(expectedErrorMessage);
         }
 
         [Theory]
