@@ -85,6 +85,19 @@ namespace QuadPay.Domain
             Installments = new List<Installment>();
             var paymentAmountPerInstallment = TotalAmountDue / NumberOfInstallments;
 
+            //initialize with first payment
+            var initialPayment = new Installment(paymentAmountPerInstallment, OriginationDate);
+            Installments.Add(initialPayment);
+
+            var paymentDate = OriginationDate;
+
+            //rest of the payments
+            for (var i = 1; i < NumberOfInstallments; i++)
+            {
+                paymentDate = paymentDate.AddDays(InstallmentIntervalDays);
+                var installmentPayment = new Installment(paymentAmountPerInstallment, paymentDate);
+                Installments.Add(installmentPayment);
+            }
         }
     }
 }
