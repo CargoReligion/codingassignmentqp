@@ -66,6 +66,22 @@ namespace QuadPay.Test
         }
 
         [Fact]
+        public void ShouldCreateDefaultNumberOfInstallmentsIfNotSpecified()
+        {
+            GivenADefaultPaymentPlan();
+
+            _givenAPaymentPlan.Installments.Count.Should().Be(DefaultInstallmentCount);
+        }
+
+        [Fact]
+        public void ShouldCreateInstallmentsWithDefaultIntervalsIfNotSpecified()
+        {
+            GivenADefaultPaymentPlan();
+
+            ThenInstallmentsWithDueDatesBasedOffOfDefaultIntervalDaysAreCreated();
+        }
+
+        [Fact]
         public void ShouldReturnCorrectAmountToRefundAgainstPaidInstallments() {
             var paymentPlan = new PaymentPlan(100, 4);
             var firstInstallment = paymentPlan.FirstInstallment();
@@ -91,10 +107,27 @@ namespace QuadPay.Test
                 new PaymentPlan(SomeAmount, SomeInstallmentCount, SomeInstallmentIntervalDays);
         }
 
+        private void GivenADefaultPaymentPlan()
+        {
+            _givenAPaymentPlan = new PaymentPlan(SomeAmount);
+        }
+
+        private void ThenInstallmentsWithDueDatesBasedOffOfDefaultIntervalDaysAreCreated()
+        {
+            var today = Today();
+            foreach (var installment in _givenAPaymentPlan.Installments.OrderBy(x => x.DueDate))
+            {
+                installment.DueDate.Should().Be(today);
+                today = today.AddDays(DefaultIntervalDays);
+            }
+        }
+
         private PaymentPlan _givenAPaymentPlan;
         private const int SomeAmount = 100;
         private const int SomeInstallmentCount = 2;
         private const int SomeInstallmentIntervalDays = 10;
+        private const int DefaultInstallmentCount = 4;
+        private const int DefaultIntervalDays = 14;
         private Func<DateTime> Today = SystemTime.Now = () => new DateTime(2019, 01, 01);
 
         /*
