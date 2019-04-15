@@ -31,7 +31,7 @@ namespace QuadPay.Domain
 
             Id = Guid.NewGuid();
             TotalAmountDue = amount;
-            OriginationDate = DateTime.Now;
+            OriginationDate = SystemTime.Now();
             NumberOfInstallments = installmentCount;
             InstallmentIntervalDays = installmentIntervalDays;
             InitializeInstallments();

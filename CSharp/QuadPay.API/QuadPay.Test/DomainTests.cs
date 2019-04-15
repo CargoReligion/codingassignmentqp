@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using QuadPay.Domain;
 using FluentAssertions;
+using System.Linq;
 
 namespace QuadPay.Test
 {
@@ -30,11 +31,38 @@ namespace QuadPay.Test
         [Theory]
         [InlineData(1000, 4, 2)]
         [InlineData(123.23, 2, 2)]
-        // TODO What other situations should we be testing?
-        public void ShouldCreateCorrectNumberOfInstallments(decimal amount, int installmentCount, int installmentIntervalDays)
+        public void ShouldCreateCorrectNumberOfInstallments(
+            decimal amount,
+            int installmentCount,
+            int installmentIntervalDays)
         {
             var paymentPlan = new PaymentPlan(amount, installmentCount, installmentIntervalDays);
-            Assert.Equal(installmentCount, paymentPlan.Installments.Count);
+
+            paymentPlan.Installments.Count.Should().Be(installmentCount);
+        }
+
+        [Fact]
+        public void ShouldCreateInstallmentsWithCorrectDueDates()
+        {
+            GivenATypicalPaymentPlan();
+
+            var firstPayment = _givenAPaymentPlan.Installments.OrderBy(x => x.DueDate).First();
+            firstPayment.DueDate.Should().Be(Today());
+
+            var secondPayment = _givenAPaymentPlan.Installments.OrderByDescending(x => x.DueDate).First();
+            secondPayment.DueDate.Should().Be(Today().AddDays(SomeInstallmentIntervalDays));
+        }
+
+        [Fact]
+        public void ShouldCreateInstallmentsWithCorrectAmountDue()
+        {
+            GivenATypicalPaymentPlan();
+
+            var firstPayment = _givenAPaymentPlan.Installments.OrderBy(x => x.DueDate).First();
+            firstPayment.Amount.Should().Be(SomeAmount/SomeInstallmentCount);
+
+            var secondPayment = _givenAPaymentPlan.Installments.OrderByDescending(x => x.DueDate).First();
+            secondPayment.Amount.Should().Be(SomeAmount / SomeInstallmentCount);
         }
 
         [Fact]
@@ -56,6 +84,18 @@ namespace QuadPay.Test
             paymentPlan.MakePayment(25, secondInstallment.Id);
             Assert.Equal(50, paymentPlan.OustandingBalance());
         }
+
+        private void GivenATypicalPaymentPlan()
+        {
+            _givenAPaymentPlan =
+                new PaymentPlan(SomeAmount, SomeInstallmentCount, SomeInstallmentIntervalDays);
+        }
+
+        private PaymentPlan _givenAPaymentPlan;
+        private const int SomeAmount = 100;
+        private const int SomeInstallmentCount = 2;
+        private const int SomeInstallmentIntervalDays = 10;
+        private Func<DateTime> Today = SystemTime.Now = () => new DateTime(2019, 01, 01);
 
         /*
             TODO
