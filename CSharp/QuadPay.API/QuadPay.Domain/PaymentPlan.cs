@@ -5,11 +5,17 @@ namespace QuadPay.Domain
 {
     public class PaymentPlan
     {
+        private const int _defaultInstallmentCount = 4;
+        private const int _defaultInstallmentIntervalDays = 14;
+
         public Guid Id { get; }
         public IList<Installment> Installments { get; }
         public IList<Refund> Refunds { get; }
         public DateTime OriginationDate { get; }
-        public PaymentPlan(decimal amount, int installmentCount = 4, int installmentIntervalDays = 14) {
+        public PaymentPlan(
+            decimal amount, 
+            int installmentCount = _defaultInstallmentCount, 
+            int installmentIntervalDays = _defaultInstallmentIntervalDays) {
             // TODO
             InitializeInstallments();
         }
