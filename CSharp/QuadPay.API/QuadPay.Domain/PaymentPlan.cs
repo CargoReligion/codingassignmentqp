@@ -82,7 +82,9 @@ namespace QuadPay.Domain
 
         // First Installment always occurs on PaymentPlan creation date
         private void InitializeInstallments() {
-            // TODO
+            Installments = new List<Installment>();
+            var paymentAmountPerInstallment = TotalAmountDue / NumberOfInstallments;
+
         }
     }
 }

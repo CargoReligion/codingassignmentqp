@@ -5,15 +5,20 @@ namespace QuadPay.Domain
     public class Installment
     {
         public Guid Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DueDate { get; set; }
         public decimal Amount { get; set; }
         private InstallmentStatus InstallmentStatus;
         public string PaymentReference { get; }
         // Date this Installment was marked 'Paid'
         public DateTime SettlementDate { get; }
 
-        public Installment(/* TODO */) {
-            // TODO
+        public Installment() { }
+
+        public Installment(decimal amountDue, DateTime dueDate)
+        {
+            Id = Guid.NewGuid();
+            Amount = amountDue;
+            DueDate = dueDate;
         }
 
         public bool IsPaid { 
