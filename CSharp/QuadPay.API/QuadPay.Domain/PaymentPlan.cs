@@ -20,7 +20,7 @@ namespace QuadPay.Domain
         {
             Id = Guid.NewGuid();
             TotalAmountDue = amount;
-            OriginationDate = DateTime.Today;
+            OriginationDate = DateTime.Now;
             InitializeInstallments();
         }
 
