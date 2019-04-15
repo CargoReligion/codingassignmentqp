@@ -13,6 +13,8 @@ namespace QuadPay.Domain
         public IList<Installment> Installments { get; private set; }
         public IList<Refund> Refunds { get; private set; }
         public DateTime OriginationDate { get; }
+        public int NumberOfInstallments { get; }
+        public int InstallmentIntervalDays { get; }
         public PaymentPlan(
             decimal amount, 
             int installmentCount = _defaultInstallmentCount, 
@@ -21,6 +23,8 @@ namespace QuadPay.Domain
             Id = Guid.NewGuid();
             TotalAmountDue = amount;
             OriginationDate = DateTime.Now;
+            NumberOfInstallments = installmentCount;
+            InstallmentIntervalDays = installmentIntervalDays;
             InitializeInstallments();
         }
 
