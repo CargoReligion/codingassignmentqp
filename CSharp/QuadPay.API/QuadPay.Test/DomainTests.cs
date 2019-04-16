@@ -3,6 +3,8 @@ using Xunit;
 using QuadPay.Domain;
 using FluentAssertions;
 using System.Linq;
+using QuadPay.Services;
+using NSubstitute;
 
 namespace QuadPay.Test
 {
@@ -23,7 +25,7 @@ namespace QuadPay.Test
             string expectedErrorMessage)
         {
             var exception = Assert.Throws<ArgumentException>(() => {
-                var paymentPlan = new PaymentPlan(amount, installmentCount, installmentIntervalDays);
+                var paymentPlan = new PaymentPlan(amount, PaymentServiceMock, installmentCount, installmentIntervalDays);
             });
             exception.Message.Should().Be(expectedErrorMessage);
         }
@@ -36,7 +38,7 @@ namespace QuadPay.Test
             int installmentCount,
             int installmentIntervalDays)
         {
-            var paymentPlan = new PaymentPlan(amount, installmentCount, installmentIntervalDays);
+            var paymentPlan = new PaymentPlan(amount, PaymentServiceMock, installmentCount, installmentIntervalDays);
 
             paymentPlan.Installments.Count.Should().Be(installmentCount);
         }
@@ -93,9 +95,11 @@ namespace QuadPay.Test
 
         [Fact]
         public void ShouldReturnCorrectAmountToRefundAgainstPaidInstallments() {
-            var paymentPlan = new PaymentPlan(100, 4);
+            SetupPaymentService();
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
             var firstInstallment = paymentPlan.FirstInstallment();
             paymentPlan.MakePayment(25, firstInstallment.Id);
+            //Unclear on purpose of the return value
             var cashRefundAmount = paymentPlan.ApplyRefund(new Refund(Guid.NewGuid().ToString(), 100));
             Assert.Equal(25, cashRefundAmount);
             Assert.Equal(0, paymentPlan.OustandingBalance());
@@ -103,7 +107,7 @@ namespace QuadPay.Test
 
         [Fact]
         public void ShouldReturnCorrectOutstandingBalance() {
-            var paymentPlan = new PaymentPlan(100, 4);
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
             var firstInstallment = paymentPlan.FirstInstallment();
             paymentPlan.MakePayment(25, firstInstallment.Id);
             var secondInstallment = paymentPlan.NextInstallment();
@@ -111,15 +115,20 @@ namespace QuadPay.Test
             Assert.Equal(50, paymentPlan.OustandingBalance());
         }
 
+        private void SetupPaymentService()
+        {
+            PaymentServiceMock.MakePayment(SomePayment).Returns(Guid.NewGuid());
+        }
+
         private void GivenATypicalPaymentPlan()
         {
             _givenAPaymentPlan =
-                new PaymentPlan(SomeAmount, SomeInstallmentCount, SomeInstallmentIntervalDays);
+                new PaymentPlan(SomeAmount, PaymentServiceMock, SomeInstallmentCount, SomeInstallmentIntervalDays);
         }
 
         private void GivenADefaultPaymentPlan()
         {
-            _givenAPaymentPlan = new PaymentPlan(SomeAmount);
+            _givenAPaymentPlan = new PaymentPlan(SomeAmount, PaymentServiceMock);
         }
 
         private void ThenInstallmentsWithDueDatesBasedOffOfDefaultIntervalDaysAreCreated()
@@ -138,7 +147,10 @@ namespace QuadPay.Test
         private const int SomeInstallmentIntervalDays = 10;
         private const int DefaultInstallmentCount = 4;
         private const int DefaultIntervalDays = 14;
+        private const int SomePayment = 25;
         private Func<DateTime> Today = SystemTime.Now = () => new DateTime(2019, 01, 01);
+
+        private IPaymentService PaymentServiceMock { get; set; } = Substitute.For<IPaymentService>();
 
         /*
             TODO

@@ -9,7 +9,8 @@ namespace QuadPay.Domain {
         public decimal Amount { get; }
 
         public Refund(string idempotencyKey, decimal amount) {
-            // TODO
+            IdempotencyKey = idempotencyKey;
+            Amount = amount;
         }
 
     }

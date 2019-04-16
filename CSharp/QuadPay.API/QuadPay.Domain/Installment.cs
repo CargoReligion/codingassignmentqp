@@ -8,9 +8,9 @@ namespace QuadPay.Domain
         public DateTime DueDate { get; set; }
         public decimal Amount { get; set; }
         private InstallmentStatus InstallmentStatus;
-        public string PaymentReference { get; }
+        public string PaymentReference { get; private set; }
         // Date this Installment was marked 'Paid'
-        public DateTime SettlementDate { get; }
+        public DateTime SettlementDate { get; private set; }
 
         public Installment() { }
 
@@ -44,7 +44,9 @@ namespace QuadPay.Domain
         }
 
         public void SetPaid(string paymentReference) {
-            // TODO
+            PaymentReference = paymentReference;
+            InstallmentStatus = InstallmentStatus.Paid;
+            SettlementDate = DateTime.Now;
         }
     }
 
