@@ -8,7 +8,7 @@ using NSubstitute;
 
 namespace QuadPay.Test
 {
-    public class DomainTests
+    public class PaymentPlanTests
     {
 
         [Theory]
@@ -216,10 +216,5 @@ namespace QuadPay.Test
         private Func<DateTime> Today = SystemTime.Now = () => new DateTime(2019, 01, 01);
 
         private IPaymentService PaymentServiceMock { get; set; } = Substitute.For<IPaymentService>();
-
-        /*
-            TODO
-            Increase domain test coverage
-         */
     }
 }

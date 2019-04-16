@@ -11,6 +11,8 @@ namespace QuadPay.Domain {
         public Refund(string idempotencyKey, decimal amount) {
             IdempotencyKey = idempotencyKey;
             Amount = amount;
+            Date = SystemTime.Now();
+            Id = Guid.NewGuid();
         }
 
     }
