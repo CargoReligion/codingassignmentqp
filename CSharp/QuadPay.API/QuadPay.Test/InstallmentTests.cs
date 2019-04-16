@@ -17,6 +17,26 @@ namespace QuadPay.Test
             _givenAnInstallment.IsPending.Should().BeTrue();
         }
 
+        [Fact]
+        public void ShouldSetPaidStatus()
+        {
+            GivenATypicalInstallment();
+
+            _givenAnInstallment.SetStatus(Guid.NewGuid());
+
+            _givenAnInstallment.IsPaid.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ShouldSetDefaultedStatus()
+        {
+            GivenATypicalInstallment();
+
+            _givenAnInstallment.SetStatus(default(Guid));
+
+            _givenAnInstallment.IsDefaulted.Should().BeTrue();
+        }
+
         private void GivenATypicalInstallment()
         {
             _givenAnInstallment =
