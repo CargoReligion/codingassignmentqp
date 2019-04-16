@@ -45,8 +45,11 @@ namespace QuadPay.Domain
 
         // Installments are paid in order by Date
         public Installment NextInstallment() {
-            // TODO
-            return new Installment();
+            var next = Installments.Where(i => i.IsPending)
+                           .OrderBy(i => i.DueDate)
+                           .FirstOrDefault();
+
+            return next;
         }
 
         public Installment FirstInstallment() {
