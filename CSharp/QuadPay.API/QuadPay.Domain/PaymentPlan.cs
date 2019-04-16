@@ -82,10 +82,8 @@ namespace QuadPay.Domain
         public IList<Installment> PendingInstallments() 
             => Installments.Where(i => i.IsPending).ToList();
 
-        public decimal MaximumRefundAvailable() {
-            // TODO
-            return 0;
-        }
+        public decimal MaximumRefundAvailable() 
+            => Refunds.Sum(r => r.Amount);
 
         // We only accept payments matching the Installment Amount.
         public void MakePayment(decimal amount, Guid installmentId) {
@@ -111,7 +109,7 @@ namespace QuadPay.Domain
             var refundedAmountAgainstPaidInstallments = 
                 Installments
                 .Where(i => i.IsPaid)
-                .Sum(j => j.Amount);
+                .Sum(i => i.Amount);
 
             Refunds.Add(refund);
 

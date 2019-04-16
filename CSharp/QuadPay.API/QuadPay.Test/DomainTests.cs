@@ -101,8 +101,19 @@ namespace QuadPay.Test
             paymentPlan.MakePayment(25, firstInstallment.Id);
             //Unclear on purpose of the return value
             var cashRefundAmount = paymentPlan.ApplyRefund(new Refund(Guid.NewGuid().ToString(), 100));
-            Assert.Equal(25, cashRefundAmount);
-            Assert.Equal(0, paymentPlan.OustandingBalance());
+            cashRefundAmount.Should().Be(25);
+            paymentPlan.OustandingBalance().Should().Be(0);
+        }
+
+        [Fact]
+        public void ShouldReturnMaximumRefundsAvailable()
+        {
+            SetupPaymentService();
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
+            var firstInstallment = paymentPlan.FirstInstallment();
+            paymentPlan.MakePayment(25, firstInstallment.Id);
+            paymentPlan.ApplyRefund(new Refund(Guid.NewGuid().ToString(), 100));
+            paymentPlan.MaximumRefundAvailable().Should().Be(100);
         }
 
         [Fact]
