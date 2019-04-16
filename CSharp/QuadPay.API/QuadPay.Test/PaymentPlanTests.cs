@@ -94,7 +94,8 @@ namespace QuadPay.Test
         }
 
         [Fact]
-        public void ShouldReturnCorrectAmountToRefundAgainstPaidInstallments() {
+        public void ShouldReturnCorrectAmountToRefundAgainstPaidInstallments()
+        {
             SetupPaymentService();
             var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
             var firstInstallment = paymentPlan.FirstInstallment();
