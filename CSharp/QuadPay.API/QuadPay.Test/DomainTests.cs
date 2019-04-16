@@ -143,6 +143,26 @@ namespace QuadPay.Test
             Assert.Equal(75, amountPastDue);
         }
 
+        [Fact]
+        public void ShouldThrowExceptionWhenInstallmentNotFoundWhileMakingPayment()
+        {
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
+            var randomInstallmentId = Guid.NewGuid();
+            var exception = Assert.Throws<ArgumentException>(() => paymentPlan.MakePayment(25, randomInstallmentId));
+            exception.Message.Should().Be($"No Installment Found for Provided installmentId: {randomInstallmentId}{Environment.NewLine}Parameter name: installmentId");
+        }
+
+        [Theory]
+        [InlineData(20)]
+        [InlineData(26)]
+        public void ShouldThrowExceptionWhenAmountDoesNotMatch(decimal paymentAmount)
+        {
+            SetupPaymentService();
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
+            var firstInstallment = paymentPlan.FirstInstallment();
+            var exception = Assert.Throws<ArgumentException>(() => paymentPlan.MakePayment(paymentAmount, firstInstallment.Id));
+            exception.Message.Should().Be($"Payment amount must match installment amount.{Environment.NewLine}Parameter name: amount");
+        }
 
         private void SetupPaymentService()
         {
