@@ -43,10 +43,27 @@ namespace QuadPay.Domain
             }
         }
 
-        public void SetPaid(string paymentReference) {
+        public void SetStatus(Guid paymentReference)
+        {
+            if (paymentReference == Guid.Empty)
+            {
+                SetDefaulted();
+            }
+            else
+            {
+                SetPaid(paymentReference.ToString());
+            }
+        }
+
+        private void SetPaid(string paymentReference) {
             PaymentReference = paymentReference;
             InstallmentStatus = InstallmentStatus.Paid;
             SettlementDate = DateTime.Now;
+        }
+
+        private void SetDefaulted()
+        {
+            InstallmentStatus = InstallmentStatus.Defaulted;
         }
     }
 

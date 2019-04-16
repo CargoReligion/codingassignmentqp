@@ -68,8 +68,9 @@ namespace QuadPay.Domain
         }
 
         public decimal AmountPastDue(DateTime currentDate) {
-            // TODO
-            return 0;
+            return Installments.Where(i => currentDate.CompareTo(i.DueDate) >= 1 && (i.IsPending || i.IsDefaulted))
+                                .Select(i => i.Amount)
+                                .Sum();
         }
 
         public IList<Installment> PaidInstallments() 
@@ -100,9 +101,9 @@ namespace QuadPay.Domain
                 throw new ArgumentException($"Payment amount must match installment amount.", nameof(amount));
             }
 
-            //In production, this would be a true service to make a payment
-            var paymentReferenceId = _paymentService.MakePayment(amount); 
-            installment.SetPaid(paymentReferenceId.ToString());
+            //In production, this would be a real service to make a payment
+            var paymentReferenceId = _paymentService.MakePayment(amount);
+            installment.SetStatus(paymentReferenceId);
         }
 
         // Returns: Amount to refund via PaymentProvider

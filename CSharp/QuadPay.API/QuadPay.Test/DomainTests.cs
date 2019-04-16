@@ -107,6 +107,7 @@ namespace QuadPay.Test
 
         [Fact]
         public void ShouldReturnCorrectOutstandingBalance() {
+            SetupPaymentService();
             var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
             var firstInstallment = paymentPlan.FirstInstallment();
             paymentPlan.MakePayment(25, firstInstallment.Id);
@@ -115,9 +116,42 @@ namespace QuadPay.Test
             Assert.Equal(50, paymentPlan.OustandingBalance());
         }
 
+        [Fact]
+        public void AmountPastDueIsReturnedForPendingStatuses()
+        {
+            SetupPaymentService();
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
+            var firstInstallment = paymentPlan.FirstInstallment();
+            paymentPlan.MakePayment(25, firstInstallment.Id);
+
+            var amountPastDue = paymentPlan.AmountPastDue(Today().AddMonths(3));
+            Assert.Equal(75, amountPastDue);
+        }
+
+        [Fact]
+        public void AmountPastDueIsReturnedForDefaultedStatuses()
+        {
+            SetupPaymentService();
+            var paymentPlan = new PaymentPlan(100, PaymentServiceMock, 4);
+            var firstInstallment = paymentPlan.FirstInstallment();
+            paymentPlan.MakePayment(25, firstInstallment.Id);
+
+            SetupPaymentServiceToDefault();
+            var secondInstallment = paymentPlan.NextInstallment();
+            paymentPlan.MakePayment(25, secondInstallment.Id);
+            var amountPastDue = paymentPlan.AmountPastDue(Today().AddMonths(3));
+            Assert.Equal(75, amountPastDue);
+        }
+
+
         private void SetupPaymentService()
         {
             PaymentServiceMock.MakePayment(SomePayment).Returns(Guid.NewGuid());
+        }
+
+        private void SetupPaymentServiceToDefault()
+        {
+            PaymentServiceMock.MakePayment(SomePayment).Returns(default(Guid));
         }
 
         private void GivenATypicalPaymentPlan()
