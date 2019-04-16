@@ -19,26 +19,27 @@ namespace QuadPay.Domain
             Id = Guid.NewGuid();
             Amount = amountDue;
             DueDate = dueDate;
+            InstallmentStatus = InstallmentStatus.Pending;
         }
 
         public bool IsPaid { 
-            get {
-                // TODO
-                return true;
+            get
+            {
+                return InstallmentStatus == InstallmentStatus.Paid;
             }
         }
 
         public bool IsDefaulted { 
-            get {
-                // TODO
-                return true;
+            get
+            {
+                return InstallmentStatus == InstallmentStatus.Defaulted;
             }
         }
 
         public bool IsPending { 
-            get {
-                // TODO
-                return true;
+            get
+            {
+                return InstallmentStatus == InstallmentStatus.Pending;
             }
         }
 

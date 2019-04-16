@@ -74,6 +74,16 @@ namespace QuadPay.Test
         }
 
         [Fact]
+        public void AllInstallmentsAreInitializedWithPendingStatus()
+        {
+            GivenADefaultPaymentPlan();
+            foreach (var installment in _givenAPaymentPlan.Installments)
+            {
+                installment.IsPending.Should().BeTrue();
+            }
+        }
+
+        [Fact]
         public void ShouldCreateInstallmentsWithDefaultIntervalsIfNotSpecified()
         {
             GivenADefaultPaymentPlan();

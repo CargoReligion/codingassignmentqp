@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuadPay.Domain
 {
@@ -59,18 +60,15 @@ namespace QuadPay.Domain
         }
 
         public IList<Installment> PaidInstallments() {
-            // TODO
-            return new List<Installment>();
+            return Installments.Where(i => i.IsPaid).ToList<Installment>();
         }
 
         public IList<Installment> DefaultedInstallments() {
-            // TODO
-            return new List<Installment>();
+            return Installments.Where(i => i.IsDefaulted).ToList<Installment>();
         }
 
         public IList<Installment> PendingInstallments() {
-            // TODO
-            return new List<Installment>();
+            return Installments.Where(i => i.IsPending).ToList<Installment>();
         }
 
         public decimal MaximumRefundAvailable() {
