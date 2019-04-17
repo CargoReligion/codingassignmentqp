@@ -5,40 +5,65 @@ namespace QuadPay.Domain
     public class Installment
     {
         public Guid Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DueDate { get; set; }
         public decimal Amount { get; set; }
         private InstallmentStatus InstallmentStatus;
-        public string PaymentReference { get; }
+        public string PaymentReference { get; private set; }
         // Date this Installment was marked 'Paid'
-        public DateTime SettlementDate { get; }
+        public DateTime SettlementDate { get; private set; }
 
-        public Installment(/* TODO */) {
-            // TODO
+        public Installment() { }
+
+        public Installment(decimal amountDue, DateTime dueDate)
+        {
+            Id = Guid.NewGuid();
+            Amount = amountDue;
+            DueDate = dueDate;
+            InstallmentStatus = InstallmentStatus.Pending;
         }
 
         public bool IsPaid { 
-            get {
-                // TODO
-                return true;
+            get
+            {
+                return InstallmentStatus == InstallmentStatus.Paid;
             }
         }
 
         public bool IsDefaulted { 
-            get {
-                // TODO
-                return true;
+            get
+            {
+                return InstallmentStatus == InstallmentStatus.Defaulted;
             }
         }
 
         public bool IsPending { 
-            get {
-                // TODO
-                return true;
+            get
+            {
+                return InstallmentStatus == InstallmentStatus.Pending;
             }
         }
 
-        public void SetPaid(string paymentReference) {
-            // TODO
+        public void SetStatus(Guid paymentReference)
+        {
+            if (paymentReference == Guid.Empty)
+            {
+                SetDefaulted();
+            }
+            else
+            {
+                SetPaid(paymentReference.ToString());
+            }
+        }
+
+        private void SetPaid(string paymentReference) {
+            PaymentReference = paymentReference;
+            InstallmentStatus = InstallmentStatus.Paid;
+            SettlementDate = DateTime.Now;
+        }
+
+        private void SetDefaulted()
+        {
+            InstallmentStatus = InstallmentStatus.Defaulted;
         }
     }
 

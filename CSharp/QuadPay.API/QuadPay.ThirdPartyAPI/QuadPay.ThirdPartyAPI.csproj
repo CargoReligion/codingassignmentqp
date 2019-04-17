@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\QuadPay.ThirdPartyAPI\QuadPay.ThirdPartyAPI.csproj" />
-  </ItemGroup>
-
 </Project>
