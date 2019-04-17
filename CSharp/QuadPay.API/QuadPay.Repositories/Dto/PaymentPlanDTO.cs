@@ -11,6 +11,7 @@ namespace QuadPay.Repositories.Dto
         public Guid UserId { get; set; }
         public decimal TotalAmountDue { get; set; }
         public DateTime OriginationDate { get; set; }
+        public decimal OustandingBalance { get; set; }
         public int NumberOfInstallments { get; set; }
         public int InstallmentIntervalDays { get; set; }
         public bool IsPaymentOnTime { get; set; }

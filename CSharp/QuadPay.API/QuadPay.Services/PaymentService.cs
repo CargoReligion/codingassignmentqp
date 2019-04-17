@@ -23,5 +23,11 @@ namespace QuadPay.Services
 
             return ontimePayments / (ontimePayments + latePayments);
         }
+
+        public decimal GetOutstandingBalances(Guid userId)
+        {
+            var paymentPlans = _paymentPlanRepository.GetPaymentPlansByUserId(userId).ToList();
+            return paymentPlans.Sum(x => x.OustandingBalance);
+        }
     }
 }

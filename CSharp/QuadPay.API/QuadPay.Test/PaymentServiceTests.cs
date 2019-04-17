@@ -38,10 +38,24 @@ namespace QuadPay.Test
             ThenOntimePaymentRatioIs50Percent();
         }
 
+        [Fact]
+        public void OutStandingBalanceIsReturned()
+        {
+            SetupPaymentService();
+            GivenAnOntimePaymentPlan();
+            GivenAnotherOntimePaymentPlan();
+            SettingUpRepository();
+
+            WhenGettingOutstandingBalance();
+
+            ThenOutstandingBalanceIsReturned();
+        }
+
         private void GivenAnOntimePaymentPlan()
         {
             _givenAPaymentPlan = new PaymentPlanDTO()
             {
+                OustandingBalance = 100,
                 IsPaymentOnTime = true
             };
             _givenPaymentPlans.Add(_givenAPaymentPlan);
@@ -60,6 +74,7 @@ namespace QuadPay.Test
         {
             _givenAnotherPaymentPlan = new PaymentPlanDTO()
             {
+                OustandingBalance = 50,
                 IsPaymentOnTime = true
             };
             _givenPaymentPlans.Add(_givenAnotherPaymentPlan);
@@ -80,6 +95,11 @@ namespace QuadPay.Test
             _thenRatio = _paymentService.GetOnTimePaymentRatio(_userId);
         }
 
+        private void WhenGettingOutstandingBalance()
+        {
+            _thenOutstandingBalance = _paymentService.GetOutstandingBalances(_userId);
+        }
+
         private void ThenOntimePaymentRatioIs100Percent()
         {
             _thenRatio.Should().Be(1);
@@ -88,6 +108,11 @@ namespace QuadPay.Test
         private void ThenOntimePaymentRatioIs50Percent()
         {
             _thenRatio.Should().Be(0.5m);
+        }
+
+        private void ThenOutstandingBalanceIsReturned()
+        {
+            _thenOutstandingBalance.Should().Be(150m);
         }
 
         private PaymentService _paymentService;
@@ -99,5 +124,6 @@ namespace QuadPay.Test
         private PaymentPlanDTO _givenAnotherPaymentPlan;
         private List<PaymentPlanDTO> _givenPaymentPlans { get; set; } = new List<PaymentPlanDTO>();
         private decimal _thenRatio;
+        private decimal _thenOutstandingBalance;
     }
 }
