@@ -6,7 +6,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuadPay.Domain", "QuadPay.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuadPay.Test", "QuadPay.Test\QuadPay.Test.csproj", "{E7C66BAB-39BC-4CE0-8C41-BB21E3C921CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadPay.Services", "QuadPay.Services\QuadPay.Services.csproj", "{8AD00476-16E0-48A9-BE8C-399DE7F8C7DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuadPay.Services", "QuadPay.Services\QuadPay.Services.csproj", "{8AD00476-16E0-48A9-BE8C-399DE7F8C7DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadPay.Repositories", "QuadPay.Repositories\QuadPay.Repositories.csproj", "{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadPay.ThirdPartyAPI", "QuadPay.ThirdPartyAPI\QuadPay.ThirdPartyAPI.csproj", "{8B592250-D032-46B0-8BA7-CA8E7A9FC966}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +58,30 @@ Global
 		{8AD00476-16E0-48A9-BE8C-399DE7F8C7DA}.Release|x64.Build.0 = Release|Any CPU
 		{8AD00476-16E0-48A9-BE8C-399DE7F8C7DA}.Release|x86.ActiveCfg = Release|Any CPU
 		{8AD00476-16E0-48A9-BE8C-399DE7F8C7DA}.Release|x86.Build.0 = Release|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Debug|x64.Build.0 = Debug|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Release|x64.ActiveCfg = Release|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Release|x64.Build.0 = Release|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{F3913AB7-F3E6-4639-BB99-9BCEF971B5F2}.Release|x86.Build.0 = Release|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Debug|x64.Build.0 = Debug|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Debug|x86.Build.0 = Debug|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Release|x64.ActiveCfg = Release|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Release|x64.Build.0 = Release|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B592250-D032-46B0-8BA7-CA8E7A9FC966}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

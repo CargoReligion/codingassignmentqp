@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuadPay.Domain\QuadPay.Domain.csproj" />
+    <ProjectReference Include="..\QuadPay.Repositories\QuadPay.Repositories.csproj" />
+    <ProjectReference Include="..\QuadPay.Services\QuadPay.Services.csproj" />
   </ItemGroup>
 
 </Project>

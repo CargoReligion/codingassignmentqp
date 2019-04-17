@@ -4,6 +4,6 @@ namespace QuadPay.Services
 {
     public interface IPaymentService
     {
-        Guid MakePayment(decimal amount);
+        decimal GetOnTimePaymentRatio(Guid userId);
     }
 }

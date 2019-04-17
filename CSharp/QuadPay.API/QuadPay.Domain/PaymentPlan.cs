@@ -1,4 +1,4 @@
-﻿using QuadPay.Services;
+﻿using QuadPay.ThirdPartyAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +10,22 @@ namespace QuadPay.Domain
         private const int _defaultInstallmentCount = 4;
         private const int _defaultInstallmentIntervalDays = 14;
 
-        private IPaymentService _paymentService;
+        private IThirdPartyPaymentAPI _thirdPartyPaymentService;
 
         public Guid Id { get; }
+        public Guid UserId { get; }
         public decimal TotalAmountDue { get; private set; }
         public IList<Installment> Installments { get; private set; } = new List<Installment>();
         public IList<Refund> Refunds { get; private set; } = new List<Refund>();
         public DateTime OriginationDate { get; }
         public int NumberOfInstallments { get; }
         public int InstallmentIntervalDays { get; }
+        public bool IsPaymentOnTime => AmountPastDue(SystemTime.Now()) == 0;
+
         public PaymentPlan(
-            decimal amount, 
-            IPaymentService paymentService,
+            Guid userId,
+            decimal amount,
+            IThirdPartyPaymentAPI thirdPartyPaymentService,
             int installmentCount = _defaultInstallmentCount, 
             int installmentIntervalDays = _defaultInstallmentIntervalDays)
         {
@@ -33,13 +37,13 @@ namespace QuadPay.Domain
 
             if (installmentIntervalDays <= 0)
                 throw new ArgumentException($"There must be atleast one installment interval day. {nameof(installmentIntervalDays)}: {installmentIntervalDays}");
-
+            UserId = userId;
             Id = Guid.NewGuid();
             TotalAmountDue = amount;
             OriginationDate = SystemTime.Now();
             NumberOfInstallments = installmentCount;
             InstallmentIntervalDays = installmentIntervalDays;
-            _paymentService = paymentService;
+            _thirdPartyPaymentService = thirdPartyPaymentService;
             InitializeInstallments();
         }
 
@@ -99,8 +103,8 @@ namespace QuadPay.Domain
                 throw new ArgumentException($"Payment amount must match installment amount.", nameof(amount));
             }
 
-            //In production, this would be a real service to make a payment
-            var paymentReferenceId = _paymentService.MakePayment(amount);
+            //Simulating a third party api call
+            var paymentReferenceId = _thirdPartyPaymentService.MakePayment(amount);
             installment.SetStatus(paymentReferenceId);
         }
 
